@@ -1,0 +1,159 @@
+paths:
+  /carts:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+        - Carritos
+      responses:
+        '200':
+          description: Lista de carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+  /carts/{id}:
+    get:
+      summary: Obtener un carrito por su ID
+      tags:
+        - Carritos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+      responses:
+        '200':
+          description: Detalles del carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+    post:
+      summary: Agregar un nuevo carrito
+      tags:
+        - Carritos
+      responses:
+        '200':
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  newCart:
+                    $ref: '#/components/schemas/Cart'
+  /carts/{cid}/product/{pid}:
+    delete:
+      summary: Eliminar un producto de un carrito
+      tags:
+        - Carritos
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID del producto
+      responses:
+        '200':
+          description: Producto eliminado del carrito exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+  /carts/{cid}/purchase:
+    post:
+      summary: Realizar una compra desde el carrito
+      tags:
+        - Carritos
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: ID del carrito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          description: Compra realizada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  ticket:
+                    type: string
+        '500':
+          description: Error al procesar la compra
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error:
+                    type: string
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              producto:
+                $ref: '#/components/schemas/Product'
+              cantidad:
+                type: number
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+        purchase_datetime:
+          type: string
+          format: date-time
+        code:
+          type: string
+      required:
+        - items
+        - purchase_datetime
+        - code
+

@@ -1,0 +1,60 @@
+<h1>Pago con Stripe</h1>
+<form action="/payment/payment/process-payment" method="post" id="payment-form">
+  <div class="form-row">
+    <label for="card-element">
+      Ingrese los detalles de su tarjeta de crédito:
+    </label>
+    <div id="card-element">
+    </div>
+    <div id="card-errors" role="alert"></div>
+  </div>
+
+  <button type="submit" id="submit-button">Pagar</button>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripePublicKey = 'pk_test_51NtfGHJlgI4BwIHcWoVJdvJGvU4jtbwWenxV5KWu7YmnszF5bL30FDt97jcCmZrufz3ofBsgTT5SwaRSC2ZEnSyf00jyNVh8je'; // Tu clave pública de Stripe
+  var stripe = Stripe(stripePublicKey);
+  var elements = stripe.elements();
+  var style = {
+    base: {
+      fontSize: '16px',
+      color: '#32325d',
+    },
+  };
+
+  var card = elements.create('card', { style: style });
+  card.mount('#card-element');
+  card.on('change', function (event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+      displayError.textContent = event.error.message;
+    } else {
+      displayError.textContent = '';
+    }
+  });
+
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    document.querySelector('button').disabled = true;
+
+    stripe
+      .createPaymentMethod({
+        type: 'card',
+        card: card,
+      })
+      .then(function (result) {
+        if (result.error) {
+          var errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+          document.querySelector('button').disabled = false;
+        } else {
+          var paymentMethodId = result.paymentMethod.id;
+          form.submit();
+        }
+      });
+  });
+</script>

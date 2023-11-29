@@ -1,0 +1,47 @@
+<div>
+    <h1>Panel de Administrador</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{this.first_name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.role}}</td>
+                <td>
+                <form method="POST" action="/admin/update-role/{{this._id}}">
+                    <select name="newRole">
+                        <option value="user">Usuario</option>
+                        <option value="admin">Admin</option>
+                        <option value="premium">Premium</option>
+                    </select>
+                    <button type="submit">Cambiar Rol</button>
+                </form>
+                <form method="POST" action="/admin/delete/{{this._id}}">
+                    <button type="submit">Eliminar</button>
+                </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script>
+        function changeRole(userId) {
+            const newRole = document.getElementById(`roleSelect-${userId}`).value;
+
+        }
+
+        function deleteUser(userId) {
+        }
+    </script>
+
+</div>

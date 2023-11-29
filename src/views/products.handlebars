@@ -1,0 +1,106 @@
+<style>    
+    .product-image {
+        width: 150px;
+        height: 200px;
+    }
+    .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: 100%;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.3/dist/sweetalert2.min.js"></script>
+<h1 style="text-align: center;">Products</h1>
+<br>
+
+<div class="row">
+    {{#each data.docs}}
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <img src="{{this.thumbnails}}" class="card-img-top product-image" alt="{{this.title}}">
+            <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+                <p class="card-text">{{this.description}}</p>
+                <p class="card-text"><strong>Precio:</strong> ${{this.price}}</p>
+                <p class="card-text"><strong>Stock:</strong> {{this.stock}}</p>
+                
+                {{#if this.stock}}
+                <p class="card-text"><strong>Categoría:</strong> {{this.category}}</p>
+                <button type="button" class="btn btn-primary add-to-cart" data-product-id="{{this._id}}">Agregar al
+                    carrito</button>
+                {{else}}
+                <p class="card-text"><strong>Categoría:</strong> Sin Stock</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item {{#if data.hasPrevPage}}{{else}}disabled{{/if}}">
+            <a class="page-link" href="/products?page={{data.prevPage}}">Anterior</a>
+        </li>
+        {{#each front_pagination}}
+        <li class="page-item {{#if this.active}}active{{/if}}">
+            <a class="page-link" href="/products?page={{this.page}}">{{this.page}}</a>
+        </li>
+        {{/each}}
+        <li class="page-item {{#if data.hasNextPage}}{{else}}disabled{{/if}}">
+            <a class="page-link" href="/products?page={{data.nextPage}}">Siguiente</a>
+        </li>
+    </ul>
+</nav>
+<div id="moving"></div>
+
+<script>
+    const userCart = "{{user.cart}}";
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const productId = button.getAttribute('data-product-id');
+            const quantity = 1;
+            const url = `/api/carts/${userCart}/product/${productId}`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quantity })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Producto Agregado',
+                            text: 'El producto se ha agregado al carrito con éxito.',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un error al agregar el producto al carrito.',
+                            showConfirmButton: true
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error de red al agregar el producto al carrito:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Red',
+                        text: 'Hubo un error de red al agregar el producto al carrito.',
+                        showConfirmButton: true
+                    });
+                });
+        });
+    });
+</script>
