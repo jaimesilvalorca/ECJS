@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export default class MongoClient{
     constructor(){
@@ -8,7 +11,7 @@ export default class MongoClient{
 
     connect = async() =>{
         try {
-            await this.client.connect('mongodb://127.0.0.1:27017/ecommerce')
+            await this.client.connect(process.env.URI)
             
         } catch (error) {
             console.log(error)
