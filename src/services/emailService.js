@@ -6,7 +6,7 @@ const emailService = {
     const MailGenerator = new mailgen({
       theme: 'default',
       product: {
-        name: 'JS ESHOP',
+        name: 'Limonatura',
         link: 'http://www.limonatura.cl'
       }
     });
@@ -22,7 +22,7 @@ const emailService = {
           }
         },
         outro: 'Si no solicitaste esto, no es necesario realizar ninguna acción.',
-        signature: 'Atentamente,\nJS ESHOP'
+        signature: 'Atentamente,\nLimonatura'
       }
     };
 
@@ -39,7 +39,7 @@ const emailService = {
     const message = {
       from: process.env.GMAIL_USER,
       to: toEmail,
-      subject: 'Restablecimiento de contraseña - JS ESHOP',
+      subject: 'Restablecimiento de contraseña - Limonatura',
       html: MailGenerator.generate(emailContent),
       text: emailText
     };

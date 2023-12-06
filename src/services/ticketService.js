@@ -9,14 +9,14 @@ class TicketService {
     const MailGenerator = new mailgen({
       theme: 'default',
       product: {
-        name: 'JS ESHOP',
+        name: 'Limonatura',
         link: 'http://www.limonatura.cl'
       }
     });
 
     const response = {
       body: {
-        intro: 'Tu factura ha llegado!!',
+        intro: 'El detalle de tu compra ha llegado!!',
         table: {
           data: [
             {
@@ -59,7 +59,7 @@ class TicketService {
       const message = {
         from: process.env.GMAIL_USER,
         to: userEmail,
-        subject: "¡Compra realizada en JS ESHOP!",
+        subject: "¡Compra realizada en Limonatura!",
         html: mail,
       };
 

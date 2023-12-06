@@ -9,6 +9,7 @@ router.get('/',getProducts) //ok
 router.get('/view',viewProducts) //ok
 router.get('/addproduct',showAddProduct)
 router.get('/:id',getProductById) //ok
+router.get('/update')
 router.delete('/:pid',deleteProduct) //ok
 router.post('/',addProduct)
 router.put('/',updatedProduct)

@@ -7,22 +7,30 @@ export const getProducts = async (req, res) => {
 }
 
 export const showAddProduct = (req, res) => {
-    return res.render('addproduct')
+    return res.render('addproduct',{layout:false})
 }
 
 
 export const viewProducts = async (req, res) => {
     const products = await productModel.find().lean().exec()
     res.render('realTimeProducts', {
-        data: products
+        data: products,
+        layout:false
     })
 }
 
+
+export const renderUpdate = async (req,res) =>{
+    
+}
 export const getProductById = async (req, res) => {
     const id = req.params.id
     const product = await productModel.findOne({ _id: id })
-    res.json({
-        product
+    const data = product
+    console.log(data)
+    res.render('update',{
+        data:data,
+        layout:false
     })
 }
 

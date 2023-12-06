@@ -22,4 +22,12 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+router.get('/getall', async (req, res) => {
+  const tickets = await TicketModel.find().lean().exec();
+  const data = { data: tickets };
+
+  res.render('report', { ...data, layout: false });
+});
+
 export default router;

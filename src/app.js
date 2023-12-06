@@ -92,7 +92,7 @@ app.use('/docs',SwaggerUiExpress.serve,SwaggerUiExpress.setup(specs))
 app.use('/premium',userPremiumRouter)
 app.use('/admin',passportCall('jwt'),adminRouter)
 app.use('/payment',passportCall('jwt'),paymentRouter)
-app.use('/ticket',ticketRouter)
+app.use('/ticket',passportCall('jwt'),ticketRouter)
 app.use('/api/users',passportCall('jwt'),userRouter)
 app.use('/misdatos',passportCall('jwt'),misDatosRouter)
 

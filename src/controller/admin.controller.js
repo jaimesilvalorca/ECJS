@@ -4,7 +4,7 @@ export const renderAdminPage = async (req, res) => {
     try {
         const user = req.user.user;
         const users = await UserModel.find({}, 'first_name email role').lean().exec();
-        res.render('admin', { users,user });
+        res.render('admin', { users,user,layout:false });
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
